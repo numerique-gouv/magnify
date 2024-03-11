@@ -28,4 +28,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: false
-          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/production:latest
+          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/${GITHUB_REF##*/}
