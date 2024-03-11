@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
+        name: What
+        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       -
@@ -27,5 +30,5 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: false
-          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/${GITHUB_REF##*/}
+          push: true
+          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/${{ env.BRANCH }}
