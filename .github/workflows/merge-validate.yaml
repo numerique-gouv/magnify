@@ -34,4 +34,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/${{ steps.get-ref.outputs.tag }}
+          tags: jq422pa7.gra7.container-registry.ovh.net/magnify/staging:${{ steps.get-ref.outputs.tag }}
