@@ -5,6 +5,9 @@ An authentication, room and meeting management system for LiveKit based on Djang
 Magnify is built with a [ReactJS](https://fr.reactjs.org/) frontend and a 
 [Django](https://www.djangoproject.com/) backend.
 
+> [!WARNING]
+> The Livekit migration (from Jitsi) is still an ongoing process. If you need to use the latest magnify version supporting Jitsi as a backend, please checkout this commit: [73985fc](https://github.com/numerique-gouv/magnify/commit/73985fcb3c2843ab7f658b9a73421aa42537ca7e).
+
 ## Getting started
 
 ### Prerequisite
@@ -30,17 +33,53 @@ The easiest way to start working on the project is to use our `Makefile` :
 $ make bootstrap
 ```
 
-This command builds the `app` container, installs dependencies and performs database migrations.
+This command builds the `app` container, installs dependencies and performs database migrations,
+including creating a default superadmin user.
+
 It's a good idea to use this command each time you are pulling code from the project repository
 to avoid dependency-releated or migration-releated issues.
 
-When the command stops, check that all services are running as expected:
+### Running locally
+
+If you just want to run the app to quickly test it locally:
 
 ```bash
-$ docker compose ps
+$ make run
 ```
 
-You should now be able to access the demo site at [localhost:8070](http://localhost:8070).
+This will start a demo app on [localhost:8070](http://localhost:8070).
+
+### Development
+
+If you want to run magnify locally in order to work on it, you should instead use the
+dev-specific command:
+
+```bash
+$ make dev
+```
+
+This does _almost_ the same as the `run` command: it starts the database, the django app,
+the livekit server… but it runs the front-end app with a vite live-reload server.
+
+If everything goes well, the front-end dev server command should be running, waiting for
+files to be edited.
+
+You can now acces the dev site at [localhost:3200](http://localhost:3200) and edit the front-end
+TypeScript normally.
+
+> [!NOTE]
+> You can check that all services are running as expected with `docker compose ps`.
+
+#### Stopping the containers
+
+When you want to stop working, you can stop the front-end dev server as usual with Ctrl+C
+in your terminal, then stop all containers with:
+
+```bash
+$ make stop
+```
+
+#### More commands
 
 Finally, you can see all available commands in our `Makefile` with :
 
@@ -52,7 +91,10 @@ $ make help
 
 You can access the Django admin site at [localhost:8071/admin](http://localhost:8071/admin/).
 
-To access the Django admin, you will first need to create a superuser account:
+To access the Django admin, connect with the superuser created via the `make bootstrap`
+command you run earlier: `admin`/`admin`.
+
+You can always create this superuser account again if necessary with:
 
 ```bash
 $ make superuser

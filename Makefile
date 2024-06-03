@@ -106,6 +106,23 @@ run: ## Start the production and development servers
 	@$(WAIT_APP)
 .PHONY: run
 
+run-dev: ## Start the development servers
+	@$(COMPOSE) up -d app
+	@$(COMPOSE) up -d livekit
+	@$(COMPOSE) up -d keycloak
+	@echo "Wait for services to be up..."
+	@$(WAIT_KC_DB)
+	@$(WAIT_DB)
+	@$(WAIT_LIVEKIT)
+	@$(WAIT_APP)
+.PHONY: run-dev
+
+dev: ## Start the development servers, including the frontend live-reload server
+dev: \
+  run-dev \
+  run-front
+.PHONY: dev
+
 status: ## An alias for "docker compose ps"
 	@$(COMPOSE) ps
 .PHONY: status
