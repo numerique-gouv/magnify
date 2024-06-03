@@ -17,7 +17,7 @@ KEYCLOAK_URL="http://localhost:8080"
 # Livekit jwt settings
 LIVEKIT_TOKEN_EXPIRATION_SECONDS=300
 LIVEKIT_API_SECRET="secret"
-LIVEKIT_API_KEY="key"
-LIVEKIT_DOMAIN="yourdomain"
-LIVEKIT_ROOM_SERVICE_BASE_URL="yourroomserviceapiurl"
+LIVEKIT_API_KEY="devkey"
+LIVEKIT_DOMAIN="http://localhost:7880"
+LIVEKIT_ROOM_SERVICE_BASE_URL="http://localhost:7880/twirp/livekit.RoomService"
 

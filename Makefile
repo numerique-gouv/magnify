@@ -59,6 +59,7 @@ MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
 WAIT_DB              = $(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
 WAIT_APP             = $(COMPOSE_RUN) dockerize -wait tcp://app:8000 -timeout 60s
 WAIT_KC_DB           = $(COMPOSE_RUN) dockerize -wait tcp://kc_postgresql:5432 -timeout 60s
+WAIT_LIVEKIT         = $(COMPOSE_RUN) dockerize -wait http://livekit:7880 -timeout 60s
 
 # ==============================================================================
 # RULES
@@ -96,10 +97,12 @@ logs: ## Display app logs (follow mode)
 run: ## Start the production and development servers
 	@$(COMPOSE) up -d app
 	@$(COMPOSE) up -d nginx
+	@$(COMPOSE) up -d livekit
 	@$(COMPOSE) up -d keycloak
 	@echo "Wait for services to be up..."
 	@$(WAIT_KC_DB)
 	@$(WAIT_DB)
+	@$(WAIT_LIVEKIT)
 	@$(WAIT_APP)
 .PHONY: run
 
