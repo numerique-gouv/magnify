@@ -75,7 +75,6 @@ bootstrap: \
   data/static/.keep \
   install-front \
   build \
-  run \
   migrate \
   superuser
 .PHONY: bootstrap
