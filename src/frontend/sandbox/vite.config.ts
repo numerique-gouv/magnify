@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
+import replace from 'vite-plugin-filter-replace'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -8,6 +9,16 @@ export default defineConfig({
     react({
       jsxRuntime: 'automatic',
     }),
+    replace([
+      {
+        filter: ['node_modules/@livekit'],
+          replace: {
+            from: "process",
+            to: "import.meta"
+          }
+        }
+    ])
+    
   ],
   build: {
     rollupOptions: {

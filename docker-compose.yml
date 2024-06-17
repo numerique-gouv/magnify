@@ -1,9 +1,6 @@
-version: "3.5"
-
 services:
   postgresql:
     image: postgres:14.3
-    platform: linux/amd64
     ports:
       - "15432:5432"
     env_file:
@@ -11,7 +8,6 @@ services:
 
   mysql:
     image: mysql:8.0
-    platform: linux/amd64
     env_file:
       - env.d/mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -24,7 +20,6 @@ services:
         DOCKER_USER: ${DOCKER_USER:-1000}
     user: ${DOCKER_USER:-1000}
     image: magnify:development
-    platform: linux/amd64
     environment:
       - DJANGO_CONFIGURATION=Development
     env_file:
@@ -47,7 +42,6 @@ services:
         DOCKER_USER: ${DOCKER_USER:-1000}
     user: ${DOCKER_USER:-1000}
     image: magnify:production
-    platform: linux/amd64
     environment:
       - DJANGO_CONFIGURATION=Production
     env_file:
@@ -69,7 +63,7 @@ services:
       - app-demo
 
   node:
-    image: node:16.15
+    image: node:latest
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:
@@ -77,7 +71,6 @@ services:
 
   crowdin:
     image: crowdin/cli:3.7.8
-    platform: linux/amd64
     volumes:
       - ".:/app"
     env_file:
@@ -125,7 +118,6 @@ services:
 
   kc_postgresql:
       image: postgres:14.3
-      platform: linux/amd64
       ports:
         - "5433:5432"
       env_file:
@@ -152,3 +144,11 @@ services:
       - "8080:8080"
     depends_on:
       - kc_postgresql
+
+  livekit:
+    image: livekit/livekit-server
+    entrypoint: /livekit-server --dev --bind 0.0.0.0
+    ports:
+      - "7880:7880"
+      - "7881:7881"
+      - "7882:7882/udp"

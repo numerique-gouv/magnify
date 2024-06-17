@@ -1,4 +1,6 @@
 """Serializers for the core Magnify app."""
+import random
+import string
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import exceptions, serializers
@@ -92,7 +94,7 @@ class RoomSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """
         Add users and groups only for administrator users.
-        Add Jitsi credentials for public instance or related users/groups
+        Add LiveKit credentials for public instance or related users/groups
         """
         output = super().to_representation(instance)
         request = self.context.get("request")
@@ -101,7 +103,9 @@ class RoomSerializer(serializers.ModelSerializer):
             return output
 
         user = request.user
+
         role = instance.get_role(user)
+
         is_admin = models.RoleChoices.check_administrator_role(role)
 
         if role is not None:
@@ -116,10 +120,11 @@ class RoomSerializer(serializers.ModelSerializer):
             del output["configuration"]
 
         if role is not None or instance.is_public:
-            output["jitsi"] = {
-                "room": instance.jitsi_name,
-                "token": generate_token(user, instance.jitsi_name, is_admin=is_admin),
+            output["livekit"] = {
+                "room": instance.livekit_name,
+                "token": generate_token(user, instance.livekit_name, request.GET.get("guest"), is_admin=is_admin, is_temp_room=False),
             }
         output["is_administrable"] = is_admin
-
+        output["start_with_audio_muted"] = instance.configuration["startWithAudioMuted"]
+        output["start_with_video_muted"] = instance.configuration["startWithVideoMuted"]
         return output

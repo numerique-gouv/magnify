@@ -372,10 +372,19 @@ class Room(Resource):
 
     configuration = models.JSONField(
         blank=True,
-        default=dict,
-        verbose_name=_("Jitsi room configuration"),
+        default=lambda : {
+            "roomPassword": "",
+            "askForPassword": False,
+            "enableLobbyChat": True,
+            "waitingRoomEnabled": True,
+            "startWithAudioMuted": False,
+            "startWithVideoMuted": True,
+            "askForAuthentication": True,
+            "screenSharingEnabled": True
+        },
+        verbose_name=_("Magnify room configuration"),
         help_text=_(
-            "Values for Jitsi parameters to configure the room via the iframe API."
+            "Values for Magnify parameters to configure the room."
         ),
     )
 
@@ -405,9 +414,9 @@ class Room(Resource):
         super().clean_fields(exclude=exclude)
 
     @property
-    def jitsi_name(self):
-        """The name used for the room in Jitsi."""
-        return f"{settings.JITSI_ROOM_PREFIX}{self.id!s}".replace("-", "")
+    def livekit_name(self):
+        """The name used for the room in LiveKit."""
+        return f"{settings.LIVEKIT_ROOM_PREFIX}{self.id!s}".replace("-", "")
 
 
 class Meeting(BaseModel):
@@ -516,7 +525,7 @@ class Meeting(BaseModel):
     @property
     def jitsi_name(self):
         """The name used as Jitsi room for this meeting."""
-        return f"{settings.JITSI_ROOM_PREFIX}{self.id!s}".replace("-", "")
+        return f"{settings.LIVEKIT_ROOM_PREFIX}{self.id!s}".replace("-", "")
 
     def is_guest(self, user):
         """Return True if the user is a guest, either directly or via a group."""

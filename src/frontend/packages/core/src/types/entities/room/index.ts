@@ -19,12 +19,14 @@ export interface Room {
   slug: string;
   is_administrable: boolean;
   is_public: boolean;
-  jitsi: {
+  livekit: {
     room: string;
     token: string;
   };
   configuration?: RoomSettings;
   accesses?: RoomUserAccesses[];
+  start_with_audio_muted: boolean,
+  start_with_video_muted: boolean
 }
 
 export const defaultConfiguration: RoomSettings = {
